@@ -1,0 +1,33 @@
+{
+  "name": "loka-labs-backend",
+  "version": "1.0.0",
+  "description": "Backend for Loka Labs with ICP and Solana integration",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@dfinity/agent": "^2.4.1",
+    "@dfinity/candid": "^2.4.1",
+    "@dfinity/principal": "^2.4.1",
+    "@metaplex-foundation/js": "^0.20.1",
+    "@metaplex-foundation/mpl-token-metadata": "^3.4.0",
+    "@solana/spl-token": "^0.4.13",
+    "@solana/web3.js": "^1.98.2",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "isomorphic-fetch": "^3.0.0",
+    "pg": "^8.15.5"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/isomorphic-fetch": "^0.0.39",
+    "@types/node": "^22.15.2",
+    "@types/pg": "^8.11.14",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.3"
+  }
+}
