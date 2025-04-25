@@ -5,7 +5,7 @@ const pool = new Pool();
 export const logPrincipalRequest = async (principal: string): Promise<void> => {
   try {
     await pool.query(
-      'INSERT INTO request_wors (principal) VALUES ($1)',
+      'INSERT INTO request_logs (principal) VALUES ($1)',
       [principal]
     );
   } catch (error) {
