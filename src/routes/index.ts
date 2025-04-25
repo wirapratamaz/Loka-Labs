@@ -3,12 +3,14 @@ import { getUserData } from '../services/icp/userDataService';
 import { getTokenMetadata } from '../services/solana/tokenService';
 import { logPrincipalRequest } from '../db';
 import { isValidPrincipal, isValidSolanaAddress } from '../utils/validation';
+import { cacheUserData, cacheTokenMetadata } from '../middleware/cache';
 
 // Initialize router
 const router = express.Router();
 
 // Define routes
 router.get('/getUserData', 
+  cacheUserData(), // Add caching middleware with 5-minute cache
   async function(req: express.Request, res: express.Response): Promise<void> {
     try {
       const { principal } = req.query;
@@ -45,6 +47,7 @@ router.get('/getUserData',
 );
 
 router.get('/getMemecoinPrice', 
+  cacheTokenMetadata(), // Add caching middleware with 1-hour cache
   async function(req: express.Request, res: express.Response): Promise<void> {
     try {
       const { contract } = req.query;
