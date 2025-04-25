@@ -1,28 +1,41 @@
-import { Connection, PublicKey } from '@solana/web3.js';
-import { Metaplex } from '@metaplex-foundation/js';
-
-const SOLANA_RPC_URL = process.env.SOLANA_RPC_URL;
+import { createSolanaConnection, createMetaplex, createPublicKey } from '../../utils/solana';
+import { transformBigIntToNumber } from '../../utils/serialization';
 
 export const getTokenMetadata = async (tokenAddress: string): Promise<any> => {
   try {
-    if (!SOLANA_RPC_URL) {
-      throw new Error('Solana RPC URL not configured');
+    const connection = createSolanaConnection();
+    const metaplex = createMetaplex(connection);
+    const mint = createPublicKey(tokenAddress);
+
+    try {
+      const nft = await metaplex.nfts().findByMint({ mintAddress: mint });
+      
+      if (!nft) {
+        return {
+          tokenAddress,
+          metadataFound: false,
+          error: 'No metadata found for this token'
+        };
+      }
+      
+      return transformBigIntToNumber({
+        name: nft.name || 'Unknown',
+        symbol: nft.symbol || 'Unknown',
+        uri: nft.uri || '',
+        tokenAddress,
+        metadataFound: true,
+        metadata: nft.json || null
+      });
+    } catch (metaplexError) {
+      console.error('Error in Metaplex findByMint:', metaplexError);
+      
+      return {
+        tokenAddress,
+        metadataFound: false,
+        error: 'Failed to retrieve metadata',
+        details: metaplexError instanceof Error ? metaplexError.message : 'Unknown error'
+      };
     }
-
-    const connection = new Connection(SOLANA_RPC_URL);
-    const metaplex = new Metaplex(connection);
-    const mint = new PublicKey(tokenAddress);
-
-    // Fetch token metadata
-    const nft = await metaplex.nfts().findByMint({ mintAddress: mint });
-    
-    return {
-      name: nft.name,
-      symbol: nft.symbol,
-      uri: nft.uri,
-      tokenAddress,
-      metadata: nft.json
-    };
   } catch (error) {
     console.error('Error fetching token metadata:', error);
     throw error;

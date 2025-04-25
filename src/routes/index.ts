@@ -1,53 +1,76 @@
-import { Router, Request, Response } from 'express';
+import express, { Router, Request, Response, NextFunction } from 'express';
 import { getUserData } from '../services/icp/userDataService';
 import { getTokenMetadata } from '../services/solana/tokenService';
 import { logPrincipalRequest } from '../db';
+import { isValidPrincipal, isValidSolanaAddress } from '../utils/validation';
 
-const router = Router();
+// Initialize router
+const router = express.Router();
 
-router.get('/getUserData', async (req: Request, res: Response) => {
-  try {
-    const { principal } = req.query;
-    
-    if (!principal || typeof principal !== 'string') {
-      return res.status(400).json({ error: 'Principal ID is required' });
+// Define routes
+router.get('/getUserData', 
+  async function(req: express.Request, res: express.Response): Promise<void> {
+    try {
+      const { principal } = req.query;
+      
+      if (!principal || typeof principal !== 'string') {
+        res.status(400).json({ error: 'Principal ID is required' });
+        return;
+      }
+
+      if (!isValidPrincipal(principal)) {
+        res.status(400).json({ error: 'Invalid Principal ID format' });
+        return;
+      }
+
+      // I think need Log the request to PostgreSQL
+      try {
+        await logPrincipalRequest(principal);
+      } catch (dbError) {
+        console.error('Warning: Failed to log request to database:', dbError);
+      }
+      
+      // Call the ICP canister
+      const userData = await getUserData(principal);
+      
+      res.json(userData);
+    } catch (error) {
+      console.error('Error in getUserData endpoint:', error);
+      res.status(500).json({ 
+        error: 'Failed to fetch user data',
+        details: error instanceof Error ? error.message : 'Unknown error' 
+      });
     }
-
-    // I think need log the request to PostgreSQL
-    await logPrincipalRequest(principal);
-    
-    // Call the ICP canister
-    const userData = await getUserData(principal);
-    
-    return res.json(userData);
-  } catch (error) {
-    console.error('Error in getUserData endpoint:', error);
-    return res.status(500).json({ 
-      error: 'Failed to fetch user data',
-      details: error instanceof Error ? error.message : 'Unknown error' 
-    });
   }
-});
+);
 
-router.get('/getMemecoinPrice', async (req: Request, res: Response) => {
-  try {
-    const { contract } = req.query;
-    
-    if (!contract || typeof contract !== 'string') {
-      return res.status(400).json({ error: 'Token contract address is required' });
+router.get('/getMemecoinPrice', 
+  async function(req: express.Request, res: express.Response): Promise<void> {
+    try {
+      const { contract } = req.query;
+      
+      if (!contract || typeof contract !== 'string') {
+        res.status(400).json({ error: 'Token contract address is required' });
+        return;
+      }
+      
+      if (!isValidSolanaAddress(contract)) {
+        res.status(400).json({ error: 'Invalid Solana token address format' });
+        return;
+      }
+      
+      // Fetch token metadata from Solana
+      const tokenData = await getTokenMetadata(contract);
+      
+      res.json(tokenData);
+    } catch (error) {
+      console.error('Error in getMemecoinPrice endpoint:', error);
+      res.status(500).json({ 
+        error: 'Failed to fetch token metadata',
+        details: error instanceof Error ? error.message : 'Unknown error' 
+      });
     }
-    
-    // Fetch token metadata from Solana
-    const tokenData = await getTokenMetadata(contract);
-    
-    return res.json(tokenData);
-  } catch (error) {
-    console.error('Error in getMemecoinPrice endpoint:', error);
-    return res.status(500).json({ 
-      error: 'Failed to fetch token metadata',
-      details: error instanceof Error ? error.message : 'Unknown error' 
-    });
   }
-});
+);
 
 export default router;
