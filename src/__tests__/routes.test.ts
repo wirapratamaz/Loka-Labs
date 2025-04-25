@@ -81,15 +81,29 @@ describe('API Routes', () => {
   });
 
   describe('GET /getUserData', () => {
-    it('should return user data for a valid principal', async () => {
+    it('should work with a real principal ID', async () => {
+      const realPrincipal = 'bx77d-5qpr6-p3fkb-kcipj-iqpre-bqges-v443n-fwcaf-lbpvg-cn4xk-cae';
+      
+      // Mock specific response for this principal
+      mockedGetUserData.mockResolvedValueOnce({
+        referralCode: 'PUPS1327478D55',
+        referrerCode: '',
+        queueIdx: 0,
+        rank: [['yapsu-qrb4m-hsu7e-omaxj-z54lh-ftnku-b637p-rbhl5-pxjgd-dzn75-mqe', 3]],
+        referralsLevel1: 0,
+        referralsLevel2: 0,
+        referralsLevel3: 0,
+        referrerWallet: ''
+      });
+      
       const response = await request(app)
         .get('/api/getUserData')
-        .query({ principal: '2vxsx-fae' });
+        .query({ principal: realPrincipal });
 
       expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('referralCode', 'MOCK_CODE');
-      expect(getUserData).toHaveBeenCalledWith('2vxsx-fae');
-      expect(logPrincipalRequest).toHaveBeenCalledWith('2vxsx-fae');
+      expect(response.body).toHaveProperty('referralCode', 'PUPS1327478D55');
+      expect(getUserData).toHaveBeenCalledWith(realPrincipal);
+      expect(logPrincipalRequest).toHaveBeenCalledWith(realPrincipal);
     });
 
     it('should return 400 when principal is missing', async () => {
