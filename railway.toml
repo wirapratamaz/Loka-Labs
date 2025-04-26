@@ -8,4 +8,7 @@ healthcheckPath = "/health"
 healthcheckTimeout = 300
 
 [variables]
-NODE_ENV = "production" 
+NODE_ENV = "production"
+
+# Railway automatically exposes the DATABASE_URL from your 
+# linked Postgres service in the environment 

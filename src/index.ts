@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import routes from './routes';
 import { specs, swaggerUi } from './utils/swagger';
 import cors from 'cors';
+import { initDatabase } from './db';
 
 // Load environment variables
 dotenv.config();
@@ -30,9 +31,17 @@ app.get('/', (req, res) => {
   res.redirect('/docs');
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`API Documentation available at http://localhost:${PORT}/docs`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-});
+// Initialize database before starting the server
+initDatabase()
+  .then(() => {
+    // Start server
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log(`API Documentation available at http://localhost:${PORT}/docs`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+  })
+  .catch(error => {
+    console.error('Failed to initialize database:', error);
+    process.exit(1);
+  });
