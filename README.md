@@ -179,7 +179,44 @@ sequenceDiagram
     Express-->>Client: Token data with price
 ```
 
-## API Endpoints
+## API Documentation
+
+The API documentation is available through Swagger UI when the application is running:
+
+- Local development: http://localhost:4000/docs
+- Deployed application: https://loka-labs-production.up.railway.app/docs
+
+You can use the interactive documentation to:
+- Explore available endpoints
+- Understand required parameters
+- Test API calls directly from the browser
+- View response schemas and examples
+
+## Deployment
+
+The application is deployed on Railway, a modern cloud platform that makes hosting applications simple and efficient.
+
+### Production Deployment
+
+The production version of the API is accessible at:
+- API Documentation: https://loka-labs-production.up.railway.app/docs
+- API Base URL: https://loka-labs-production.up.railway.app/api
+
+### Deployment Architecture
+
+- The Express application handles API requests
+- PostgreSQL stores logs of ICP principal requests
+- Swagger UI provides interactive API documentation
+
+To check the latest deployment updates, clone the repository and check out the `feat/deployment` branch:
+
+```bash
+git clone <repository-url>
+cd loka-labs
+git checkout feat/deployment
+```
+
+### API Endpoints
 
 ### 1. Get User Data from ICP Canister
 
