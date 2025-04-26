@@ -238,6 +238,7 @@ GET /api/getMemecoinPrice?contract=DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263
   "uri": "https://arweave.net/QPC6FYdUn-3V8ytFNuoCS85S2tHAuiDblh6u3CIZLsw",
   "tokenAddress": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263",
   "metadataFound": true,
+  "price": "0.0000198765",
   "metadata": {
     "name": "Bonk",
     "symbol": "Bonk",
