@@ -22,12 +22,12 @@ COPY --from=base /app/dist ./dist
 COPY --from=base /app/node_modules ./node_modules
 COPY package.json ./
 
-# Set environment variables
+# Set environment variables - PORT will be overridden by Railway
 ENV NODE_ENV=production
-ENV PORT=4000
+# Let Railway set the PORT
 
-# Expose the port
-EXPOSE 4000
+# Expose the port (Railway will map this appropriately)
+EXPOSE 8080
 
 # Set the command to run
 CMD ["bun", "start"] 
