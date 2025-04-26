@@ -8,6 +8,13 @@ import { initDatabase } from './db';
 // Load environment variables
 dotenv.config();
 
+// Log environment status for debugging
+console.log('Environment setup:');
+console.log('- NODE_ENV:', process.env.NODE_ENV || 'not set');
+console.log('- PORT:', process.env.PORT || 'not set');
+console.log('- SOLANA_RPC_URL:', process.env.SOLANA_RPC_URL ? 'configured' : 'not configured');
+console.log('- DATABASE_URL:', process.env.DATABASE_URL ? 'configured' : 'not configured');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 

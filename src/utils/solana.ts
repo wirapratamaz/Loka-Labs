@@ -1,12 +1,10 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Metaplex } from '@metaplex-foundation/js';
 
-const SOLANA_RPC_URL = process.env.SOLANA_RPC_URL;
+const SOLANA_RPC_URL = process.env.SOLANA_RPC_URL || 'https://solana-mainnet.core.chainstack.com/0b3667bc9528fbc40d84210164bf1d5e';
 
 export const createSolanaConnection = (): Connection => {
-  if (!SOLANA_RPC_URL) {
-    throw new Error('Solana RPC URL not configured');
-  }
+  console.log('Using Solana RPC URL:', SOLANA_RPC_URL);
   return new Connection(SOLANA_RPC_URL);
 };
 

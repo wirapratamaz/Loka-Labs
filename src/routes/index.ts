@@ -8,6 +8,20 @@ import { cacheUserData, cacheTokenMetadata } from '../middleware/cache';
 // Initialize router
 const router = express.Router();
 
+// Debug route - only accessible in development
+if (process.env.NODE_ENV !== 'production') {
+  router.get('/debug', (req: express.Request, res: express.Response) => {
+    res.json({
+      env: {
+        NODE_ENV: process.env.NODE_ENV,
+        PORT: process.env.PORT,
+        SOLANA_RPC_URL: process.env.SOLANA_RPC_URL ? '***configured***' : 'not configured',
+        DATABASE_URL: process.env.DATABASE_URL ? '***configured***' : 'not configured'
+      }
+    });
+  });
+}
+
 // Define routes
 router.get('/getUserData', 
   cacheUserData(), // Add caching middleware with 5-minute cache
