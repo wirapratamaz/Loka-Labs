@@ -6,8 +6,6 @@ buildCommand = "bun install && bun run build"
 startCommand = "bun start"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
-restartPolicyType = "on-failure"
-restartPolicyMaxRetries = 3
 
 [variables]
 NODE_ENV = "production" 
