@@ -9,6 +9,7 @@ Backend integration with ICP (Internet Computer Protocol) and Solana for Loka La
 - PostgreSQL for request logging
 - Internet Computer Protocol (ICP) integration using @dfinity/agent
 - Solana blockchain integration using @solana/web3.js and @metaplex-foundation/js with RPC Url from Chainstack
+- Swagger UI for API documentation
 
 ## Prerequisites
 
@@ -338,3 +339,16 @@ This document covers:
 - Delegation Identity creation and usage
 - Security aspects and session management
 - Implementation details including canister verification
+
+## API Documentation
+
+The API documentation is available through Swagger UI when the application is running:
+
+- Local development: http://localhost:4000/docs
+- Deployed application: https://your-railway-domain.up.railway.app/docs
+
+You can use the interactive documentation to:
+- Explore available endpoints
+- Understand required parameters
+- Test API calls directly from the browser
+- View response schemas and examples

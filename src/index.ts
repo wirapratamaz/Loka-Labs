@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import routes from './routes';
+import { specs, swaggerUi } from './utils/swagger';
+import cors from 'cors';
 
 // Load environment variables
 dotenv.config();
@@ -10,6 +12,10 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+app.use(cors());
+
+// Swagger docs
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
 
 // Routes
 app.use('/api', routes);
@@ -19,7 +25,13 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK' });
 });
 
+// Root endpoint redirects to docs
+app.get('/', (req, res) => {
+  res.redirect('/docs');
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`API Documentation available at http://localhost:${PORT}/docs`);
 });
