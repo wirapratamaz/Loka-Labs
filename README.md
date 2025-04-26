@@ -267,6 +267,12 @@ The application uses Chainstack's Solana RPC for retrieving token metadata. Belo
 
 ![Chainstack Solana RPC Configuration](img/image.png)
 
+### Chainstack Metrics and Monitoring
+
+The Chainstack dashboard provides real-time metrics for monitoring your RPC node usage:
+
+![Chainstack Performance Metrics](img/image2.png)
+
 ## Technical Implementation Details
 
 ### ICP Integration
@@ -317,3 +323,18 @@ npm run test:watch
 - **Unit Tests**: Test individual utility functions and services
 - **Integration Tests**: Test API endpoints and middleware
 - **Mocks**: Dependencies are mocked to isolate test subjects
+
+## Documentation
+
+### Sign-In with Bitcoin (SIWB) and ICP Integration
+
+To better understand the SIWB authentication mechanism used in this project, refer to our detailed explanation document:
+
+- [SIWB and ICP Delegation Identity](./siwb-icp-explanation.markdown) - Comprehensive explanation of how Sign-In with Bitcoin works with Internet Computer's Delegation Identity system
+
+This document covers:
+- The fundamentals of SIWB authentication
+- How ICP integrates with Bitcoin for authentication
+- Delegation Identity creation and usage
+- Security aspects and session management
+- Implementation details including canister verification
