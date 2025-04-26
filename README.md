@@ -121,6 +121,64 @@ The application can be run using Docker, which simplifies the setup process and 
 - PostgreSQL data is persisted in a named volume `postgres-data`
 - The application code is mounted as a volume for development, enabling hot-reloading
 
+## Sequence Diagrams
+
+The following diagrams illustrate the request flow for each endpoint:
+
+### /getUserData Flow
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Express as Express Server
+    participant Controller as User Controller
+    participant ICP as ICP Service
+    participant Canister as ICP Canister
+    participant DB as PostgreSQL
+
+    Client->>Express: GET /api/getUserData?principal={id}
+    Express->>Controller: Request with principal param
+    Controller->>ICP: getUserData(principal)
+    ICP->>Canister: Call getUserData function
+    Canister-->>ICP: Return user data
+    ICP-->>Controller: Return serialized data
+    Controller->>DB: Log request (principal, timestamp)
+    DB-->>Controller: Confirm log saved
+    Controller-->>Express: JSON response
+    Express-->>Client: User data
+```
+
+### /getMemecoinPrice Flow
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Express as Express Server
+    participant Controller as Token Controller
+    participant Solana as Solana Service
+    participant Metaplex as Metaplex
+    participant Jupiter as Jupiter Price API
+    participant Blockchain as Solana Blockchain
+
+    Client->>Express: GET /api/getMemecoinPrice?contract={address}
+    Express->>Controller: Request with contract param
+    Controller->>Solana: getTokenMetadata(tokenAddress)
+    
+    par Metadata Request
+        Solana->>Metaplex: findByMint(mintAddress)
+        Metaplex->>Blockchain: Query token metadata
+        Blockchain-->>Metaplex: Return metadata
+        Metaplex-->>Solana: Return NFT data
+    and Price Request
+        Solana->>Jupiter: Query token price
+        Jupiter-->>Solana: Return price data
+    end
+    
+    Solana-->>Controller: Combined metadata and price
+    Controller-->>Express: JSON response
+    Express-->>Client: Token data with price
+```
+
 ## API Endpoints
 
 ### 1. Get User Data from ICP Canister
