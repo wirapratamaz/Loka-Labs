@@ -266,6 +266,12 @@ The application uses Chainstack's Solana RPC for retrieving token metadata. Belo
 
 ![Chainstack Solana RPC Configuration](img/image.png)
 
+### Chainstack Metrics and Monitoring
+
+The Chainstack dashboard provides real-time metrics for monitoring your RPC node usage:
+
+![Chainstack Performance Metrics](img/image2.png)
+
 ## Technical Implementation Details
 
 ### ICP Integration
